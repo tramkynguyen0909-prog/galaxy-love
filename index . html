@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Galaxy Love</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  background:black;
+  height:100%;
+  font-family:Arial,sans-serif;
+  color:white;
+}
+
+/* Galaxy */
+#galaxy{
+  position:fixed;
+  width:200%;
+  height:200%;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.15), transparent 60%),
+    url("https://i.imgur.com/8IuucQZ.png");
+  background-size:cover;
+  animation: spin 120s linear infinite;
+  z-index:0;
+}
+@keyframes spin{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+/* Stars */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  animation: fall linear infinite;
+}
+@keyframes fall{
+  from{transform:translateY(-10vh);}
+  to{transform:translateY(110vh);}
+}
+
+/* Intro name */
+#intro{
+  position:fixed;
+  top:35%;
+  width:100%;
+  text-align:center;
+  font-size:36px;
+  font-weight:bold;
+  color:#ff9aff;
+  text-shadow:0 0 15px #ff9aff,0 0 40px #ff5cff;
+  animation:introFade 6s ease forwards;
+  z-index:50;
+}
+@keyframes introFade{
+  0%{opacity:0;transform:scale(0.5);}
+  20%{opacity:1;transform:scale(1.1);}
+  80%{opacity:1;}
+  100%{opacity:0;transform:scale(1.3);}
+}
+
+/* Gallery */
+#gallery{
+  position:fixed;
+  inset:0;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  z-index:5;
+}
+#gallery img{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:14px;
+  cursor:pointer;
+  transition:0.4s;
+}
+#gallery img:hover{
+  transform:scale(1.2);
+}
+
+/* Zoom */
+#zoom{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.9);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:99;
+}
+#zoom img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:16px;
+}
+
+/* Lyrics */
+#lyrics{
+  position:fixed;
+  bottom:12%;
+  width:100%;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  text-shadow:0 0 10px #ff9aff,0 0 25px #ff5cff;
+  animation:pulse 1.5s infinite;
+  z-index:20;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+}
+
+/* Music button */
+#musicBtn{
+  position:fixed;
+  top:15px;
+  right:15px;
+  z-index:30;
+  background:rgba(255,255,255,0.15);
+  border:1px solid white;
+  color:white;
+  padding:8px 14px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+/* Explosion */
+.particle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:white;
+  border-radius:50%;
+  pointer-events:none;
+}
+
+/* End love */
+#endLove{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:48px;
+  font-weight:bold;
+  color:#ffb6ff;
+  text-shadow:0 0 15px #ff9aff,0 0 40px #ff5cff;
+  background:rgba(0,0,0,0.85);
+  opacity:0;
+  pointer-events:none;
+  z-index:100;
+}
+.showEnd{
+  animation:endShow 6s ease forwards;
+}
+@keyframes endShow{
+  0%{opacity:0;transform:scale(0.6);}
+  30%{opacity:1;transform:scale(1.1);}
+  70%{opacity:1;}
+  100%{opacity:0;transform:scale(1.3);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="galaxy"></div>
+<div id="intro">💖 Phan Thị Yến Nhi 💖</div>
+<div id="gallery"></div>
+<div id="lyrics"></div>
+<button id="musicBtn">🔊 Nhạc</button>
+
+<div id="zoom" onclick="this.style.display='none'">
+  <img>
+</div>
+
+<div id="endLove">💘 Tôi yêu bà 💘</div>
+
+<audio id="music" autoplay loop>
+  <source src="tinh-co-yeu-em.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* Images */
+const images=[
+"https://i.ibb.co/HTzK9WS7/IMG-1767338845296-1767346643020.jpg",
+"https://i.ibb.co/4wqxynk4/IMG-1767338845393-1767346643127.jpg",
+"https://i.ibb.co/mCnNsWDQ/IMG-1767338845479-1767346643246.jpg",
+"https://i.ibb.co/WN3GxJ0n/IMG-1767338844659-1767346642083.jpg",
+"https://i.ibb.co/DH0ZdLVG/IMG-1767338844743-1767346642240.jpg",
+"https://i.ibb.co/NdvGRxL6/IMG-1767338844819-1767346642404.jpg",
+"https://i.ibb.co/gZMHrMBD/IMG-1767338844943-1767346642523.jpg",
+"https://i.ibb.co/qFPhm43K/IMG-1767338845063-1767346642639.jpg",
+"https://i.ibb.co/FbLsqmvC/IMG-1767338845147-1767346642758.jpg",
+"https://i.ibb.co/G3bPxW72/IMG-1767338845225-1767346642910.jpg",
+"https://i.ibb.co/FbF7CSm5/att-d-CZW20xprtx-RQo-Vg-OO7-Q6n-B1-Ys-DVXJXD-Lbmye7-NGJE-jpg.jpg"
+];
+
+const gallery=document.getElementById("gallery");
+const zoom=document.getElementById("zoom");
+const zoomImg=zoom.querySelector("img");
+
+images.forEach(src=>{
+  const img=document.createElement("img");
+  img.src=src;
+  img.onclick=()=>{
+    zoom.style.display="flex";
+    zoomImg.src=src;
+  };
+  gallery.appendChild(img);
+});
+
+/* Stars */
+for(let i=0;i<140;i++){
+  const s=document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*100+"vw";
+  s.style.animationDuration=3+Math.random()*5+"s";
+  s.style.opacity=Math.random();
+  document.body.appendChild(s);
+}
+
+/* Lyrics */
+const lyrics=[
+  "🎶 Tình cờ yêu em…",
+  "Phan Thị Yến Nhi à…",
+  "Giữa muôn ngàn người…",
+  "Anh chỉ nhìn thấy em",
+  "Tim anh lạc nhịp rồi…",
+  "Anh yêu em mất rồi 💖"
+];
+let li=0;
+const lyricBox=document.getElementById("lyrics");
+setInterval(()=>{
+  lyricBox.style.opacity=0;
+  setTimeout(()=>{
+    lyricBox.innerText=lyrics[li];
+    lyricBox.style.opacity=1;
+    li=(li+1)%lyrics.length;
+  },500);
+},3500);
+
+/* Music toggle */
+const music=document.getElementById("music");
+document.getElementById("musicBtn").onclick=()=>{
+  music.paused ? music.play() : music.pause();
+};
+
+/* Explosion */
+document.addEventListener("click",e=>{
+  for(let i=0;i<20;i++){
+    const p=document.createElement("div");
+    p.className="particle";
+    p.style.left=e.clientX+"px";
+    p.style.top=e.clientY+"px";
+    document.body.appendChild(p);
+    const a=Math.random()*2*Math.PI;
+    const s=Math.random()*80;
+    p.animate([
+      {transform:"translate(0,0)",opacity:1},
+      {transform:`translate(${Math.cos(a)*s}px,${Math.sin(a)*s}px)`,opacity:0}
+    ],{duration:600});
+    setTimeout(()=>p.remove(),600);
+  }
+});
+
+/* End screen */
+setTimeout(()=>{
+  document.getElementById("endLove").classList.add("showEnd");
+},45000);
+</script>
+
+</body>
+</html>
